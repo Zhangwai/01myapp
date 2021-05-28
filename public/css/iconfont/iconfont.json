@@ -1,0 +1,44 @@
+{
+  "id": "2503009",
+  "name": "电影",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "814462",
+      "name": "向上",
+      "font_class": "xiangshang",
+      "unicode": "e6b1",
+      "unicode_decimal": 59057
+    },
+    {
+      "icon_id": "1667286",
+      "name": "向下",
+      "font_class": "xiangxia",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "6010927",
+      "name": "我的",
+      "font_class": "wode",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "1473243",
+      "name": "电影",
+      "font_class": "dianying",
+      "unicode": "e679",
+      "unicode_decimal": 59001
+    },
+    {
+      "icon_id": "19989638",
+      "name": "cinema",
+      "font_class": "cinema",
+      "unicode": "ea52",
+      "unicode_decimal": 59986
+    }
+  ]
+}
