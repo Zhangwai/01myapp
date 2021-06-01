@@ -1,8 +1,10 @@
 <template>
   <div>
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
+    <!-- <section> -->
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+    <!-- </section> -->
     <TabBar></TabBar>
   </div>
 </template>
@@ -15,6 +17,6 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-
-</style>
+<style scoped>
+  /* section{padding-bottom: 52px;} */
+</style>>

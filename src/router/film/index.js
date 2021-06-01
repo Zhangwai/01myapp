@@ -11,6 +11,14 @@ export default {
       component: () => import('@/views/Film/comingsoon')
     },
     {
+      path: 'city',
+      component: () => import(/* webpackChunkName: "yjgroup" */ '@/views/Film/city')
+    },
+    {
+      path: 'search',
+      component: () => import(/* webpackChunkName: "yjgroup" */ '@/views/Film/search')
+    },
+    {
       path: '',
       redirect: '/film/nowplaying'
     }

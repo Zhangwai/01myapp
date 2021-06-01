@@ -11,14 +11,6 @@ const routes = [
   filmRouter,
   centerRouter,
   {
-    path: '/city',
-    component: () => import(/* webpackChunkName: "yjgroup" */ '@/views/City')
-  },
-  {
-    path: 'search',
-    component: () => import(/* webpackChunkName: "yjgroup" */ '@/views/Search')
-  },
-  {
     path: '*', //  通配符
     redirect: '/film'
   }
