@@ -1,6 +1,8 @@
 <template>
     <div class="film_body">
-        <ul>
+      <Loading v-if="isLoading"></Loading>
+      <!-- <Scroller v-else> -->
+        <ul v-infinite-scroll="loadMore" infinite-scroll-distance="52" infinite-scroll-disabled="loading" infinite-scroll-immediate-check="false">
             <li v-for="item in comingList" :key="item.filmId">
                 <div class="pic_show"><img :src="item.poster" alt=""></div>
                 <div class="info_list">
@@ -14,6 +16,7 @@
                 </div>
             </li>
         </ul>
+      <!-- </Scroller> -->
     </div>
 </template>
 <script>
@@ -29,12 +32,21 @@ export default {
   name: 'Comingsoon',
   data() {
     return {
-      comingList: []
+      comingList: [],
+      isLoading: true,
+      prevCityId: -1,
+      loading: false,
+      current: 1,
+      total: 0
     }
   },
-  mounted() {
+  // 在keep-alive激活时候才有生命周期 mounted在keep-alive中触发一次后不会再触发
+  activated() {
+    var cityId = this.$store.state.city.id
+    if (this.prevCityId === cityId) { return }
+    this.isLoading = true
     axios({
-      url: 'https://m.maizuo.com/gateway?cityId=310100&pageNum=1&pageSize=10&type=2&k=2867953',
+      url: `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=1&pageSize=10&type=2&k=2867953`,
       headers: {
         'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"16189287264989141385216001","bc":"310100"}',
         'X-Host': 'mall.film-ticket.film.list'
@@ -42,7 +54,30 @@ export default {
     }).then(res => {
       console.log(res.data.data.films)
       this.comingList = res.data.data.films
+      this.isLoading = false
+      this.prevCityId = cityId
     })
+  },
+  methods: {
+    loadMore() {
+      console.log('到底了mmmmm')
+      var cityId = this.$store.state.city.id
+      this.loading = true// 禁用
+      this.current++
+      if (this.comingList.length === this.total) {
+        return
+      }
+      axios({
+        url: `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=${this.current}&pageSize=10&type=2&k=2867953`,
+        headers: {
+          'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"16189287264989141385216001","bc":"310100"}',
+          'X-Host': 'mall.film-ticket.film.list'
+        }
+      }).then(res => {
+        this.comingList = [...this.comingList, ...res.data.data.films]
+        this.loading = false
+      })
+    }
   }
 }
 </script>

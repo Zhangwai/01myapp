@@ -16,6 +16,6 @@ export default {
 }
 </script>
 <style scoped>
-    #header{widows: 100%;height: 50px;color: #fff;background: #e54847; border-bottom: 1px solid #e54847;position: relative;}
+    #header{width:100%;height: 50px;color: #fff;background: #e54847; border-bottom: 1px solid #e54847;position: relative;}
     #header h1{font-size: 18px;text-align: center;line-height: 50px;font-weight: normal;}
 </style>

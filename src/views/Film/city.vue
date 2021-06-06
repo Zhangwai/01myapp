@@ -1,55 +1,83 @@
 <template>
-    <div class="city_body"  ref="mychild">
-        <div class="city_list">
-            <div class="city_hot">
-                <h2>热门城市</h2>
-                <ul class="clearfix">
-                    <li v-for="item in hotList" :key="item.cityId">{{item.name}}</li>
+  <div class="city_body"  ref="mychild">
+    <Loading v-if="isLoading"></Loading>
+    <div class="city_list" ref="city_list" v-else>
+      <!-- <Scroller ref="city"> -->
+        <div style="overflow:hidden">
+          <div class="city_hot">
+            <h2>热门城市</h2>
+              <ul class="clearfix">
+                <li v-for="item in hotList" :key="item.cityId" @click="handleToCity(item.name,item.cityId)">{{item.name}}</li>
+              </ul>
+          </div>
+          <div class="city_sort" ref="city_sort">
+            <div v-for="item in cityList" :key="item.index">
+              <h2>{{item.index}}</h2>
+                <ul>
+                  <li v-for="itemList in item.list" :key="itemList.cityId" @click="handleToCity(itemList.name,itemList.cityId)">{{itemList.name}}</li>
                 </ul>
             </div>
-            <div class="city_sort" ref="city_sort">
-                <div v-for="item in cityList" :key="item.index">
-                    <h2>{{item.index}}</h2>
-                    <ul>
-                        <li v-for="itemList in item.list" :key="itemList.cityId">{{itemList.name}}</li>
-                    </ul>
-                </div>
-            </div>
+          </div>
         </div>
-        <div class="city_index">
-          <ul>
-            <li v-for="(item,index) in cityList" :key="item.index" @touchstart="handleToIndex(index)">{{item.index}}</li>
-          </ul>
-        </div>
+      <!-- </Scroller> -->
     </div>
+    <div class="city_index">
+      <ul>
+        <li v-for="(item,index) in cityList" :key="item.index" @click="handleToIndex(index)">{{item.index}}</li>
+      </ul>
+    </div>
+  </div>
 </template>
 <script>
 import axios from 'axios'
+import BScroll from 'better-scroll'
 export default {
   name: 'City',
   data() {
     return {
       cityList: [],
-      hotList: []
+      hotList: [],
+      isLoading: true
     }
   },
   mounted() {
-    this.$refs.mychild.style.height = document.documentElement.clientHeight - 149 + 'px'
+    // this.$refs.mychild.style.height = document.documentElement.clientHeight - 149 + 'px'
     // console.log(this.$refs.mychild.style)
-    axios({
-      url: 'https://m.maizuo.com/gateway?k=2600174',
-      headers: {
-        'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"16189287264989141385216001"}',
-        'X-Host': 'mall.film-ticket.city.list'
-      }
-    }).then(res => {
-    //   console.log(res.data.data.cities)
-      // [{index: 'A',list: [{},{}]}]
-      var { cityList, hotList } = this.formatCityList(res.data.data.cities)
-      this.cityList = cityList
-      this.hotList = hotList
-      console.log(this.cityList, this.hotList)
-    })
+    var cityList = window.localStorage.getItem('cityList')
+    var hotList = window.localStorage.getItem('hotList')
+    if (cityList && hotList) {
+      this.cityList = JSON.parse(cityList)
+      this.hotList = JSON.parse(hotList)
+      this.isLoading = false
+    } else {
+      axios({
+        url: 'https://m.maizuo.com/gateway?k=2600174',
+        headers: {
+          'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"16189287264989141385216001"}',
+          'X-Host': 'mall.film-ticket.city.list'
+        }
+      }).then(res => {
+      //   console.log(res.data.data.cities)
+        // [{index: 'A',list: [{},{}]}]
+        this.isLoading = false
+        var { cityList, hotList } = this.formatCityList(res.data.data.cities)
+        this.cityList = cityList
+        this.hotList = hotList
+        console.log(this.cityList, this.hotList)
+        // 本地存储
+        window.localStorage.setItem('cityList', JSON.stringify(cityList))
+        window.localStorage.setItem('hotList', JSON.stringify(hotList))
+        this.$nextTick(() => {
+          this.scroll = new BScroll(this.$refs.city_list, {
+            click: true
+          })
+          this.scroll.on('touchEnd', pos => {
+            this.scroll.refresh()
+            console.log(1)
+          })
+        })
+      })
+    }
   },
   methods: {
     formatCityList(cities) {
@@ -78,19 +106,34 @@ export default {
         hotList
       }
     },
+    // 页面定位
     handleToIndex(index) {
       // console.log(this.$refs.city_sort.getElementsByTagName('h2'))
-      console.log('222', this.$refs.city_sort.parentNode.scrollTop)
-      var h2 = this.$refs.city_sort.getElementsByTagName('h2')
-      this.$refs.city_sort.parentNode.scrollTop = h2[index].offsetTop
       console.log('111', this.$refs.city_sort.parentNode.scrollTop)
+      var h2 = this.$refs.city_sort.getElementsByTagName('h2')
+      console.log('222', h2[index].offsetTop)
+      this.ToScrollTop(h2[index].offsetTop)
+      // this.$refs.city.ToScrollTop(h2[index].offsetTop)
+      // this.$refs.city_sort.parentNode.scrollTop = h2[index].offsetTop
+      console.log('333', this.$refs.city_sort.parentNode.scrollTop, h2[index].offsetTop)
+    },
+    ToScrollTop(y) {
+      this.scroll.scrollTo(0, -y)
+    },
+    // 页面跳转
+    handleToCity(name, id) {
+      this.$store.commit('city/CITY_INFO', { name, id })
+      window.localStorage.setItem('nowName', name)
+      window.localStorage.setItem('nowId', id)
+      this.$router.push('/film/nowplaying')
     }
   }
 }
 </script>
 
 <style scoped>
-#content .city_body{margin-top: 97px;display: flex; width:100%;position: absolute; top: 0; bottom: 0; }
+.city_parent {width: 100%;display: flex;}
+#content .city_body{margin-top: 46px;display: flex; width:100%;position: absolute; top: 0; bottom: 0; }
 .city_body .city_list{ flex:1; overflow: auto; background: #FFF5F0;}
 .city_body .city_list::-webkit-scrollbar{
     background-color:transparent;

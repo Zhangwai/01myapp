@@ -1,5 +1,5 @@
 <template>
-  <div id="main">
+  <div id="main" ref="main">
     <Header title="Y颜影院"></Header>
     <div id="content">
       <div class="cinema_menu">
@@ -26,6 +26,9 @@ export default {
   components: {
     Header,
     cinemaList
+  },
+  mounted() {
+    this.$refs.main.style.height = document.documentElement.clientHeight + 'px'
   }
 }
 </script>

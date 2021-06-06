@@ -1,5 +1,7 @@
 <template>
-    <div class="cinema_body">
+    <div class="cinema_body" >
+      <Loading v-if="isLoading"></Loading>
+      <div ref="cinema_body" v-else style="height:100%">
         <ul>
             <li v-for="item in cinemaList" :key="item.cinemaId">
                 <div class="cinema_price">
@@ -18,19 +20,26 @@
                 </div>
             </li>
         </ul>
+      </div>
     </div>
 </template>
 <script>
+import BScroll from 'better-scroll'
 export default {
   name: 'CinemaList',
   data() {
     return {
-      cinemaList: []
+      cinemaList: [],
+      isLoading: true,
+      prevcityId: -1
     }
   },
-  mounted() {
+  activated() {
+    var cityId = this.$store.state.city.id
+    if (this.prevCityId === cityId) { return }
+    this.isLoading = true
     this.axios({
-      url: 'https://m.maizuo.com/gateway?cityId=310100&ticketFlag=1&k=8150210',
+      url: `https://m.maizuo.com/gateway?cityId=${cityId}&ticketFlag=1&k=7743423`,
       headers: {
         'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"16189287264989141385216001","bc":"310100"}',
         'X-Host': 'mall.film-ticket.cinema.list'
@@ -40,6 +49,13 @@ export default {
       console.log(res.data.data)
       if (data) {
         this.cinemaList = res.data.data.cinemas
+        this.isLoading = false
+        this.prevCityId = cityId
+        this.$nextTick(() => {
+          new BScroll(this.$refs.cinema_body, {
+            click: true
+          })
+        })
       }
     })
   },
@@ -54,7 +70,7 @@ export default {
 #content .cinema_body{ flex:1; overflow:auto;}
 .cinema_body ul{ padding:20px;}
 .cinema_body li{  border-bottom:1px solid #e6e6e6; margin-bottom: 20px;}
-.cinema_body div{margin-bottom: 10px;display: flex;}
+.cinema_body ul div{margin-bottom: 10px;display: flex;}
 .cinema_body .cinema_price,.cinema_address{ justify-content: space-between;}
 .cinema_body .q{ font-size: 11px; color:#f03d37;}
 .cinema_body .price{font-size: 18px;}
