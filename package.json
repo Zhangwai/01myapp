@@ -9,7 +9,10 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "better-scroll": "^2.3.1",
     "core-js": "^3.6.5",
+    "element-ui": "^2.15.2",
+    "mint-ui": "^2.2.13",
     "moment": "^2.29.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",

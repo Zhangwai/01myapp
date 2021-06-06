@@ -3,6 +3,17 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from 'axios'
+// 全局组件
+import Scroller from '@/components/Scroll'
+import Loading from '@/components/Loading'
+// 引入element-ui
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+// 引入mint-ui
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
+Vue.use(ElementUI)
+Vue.use(MintUI)
 
 Vue.config.productionTip = false
 Vue.prototype.axios = axios
@@ -15,6 +26,8 @@ Vue.filter('actorFilter', (actors) => {
 Vue.filter('setWH', (url, arg) => {
   return url.replace('w.h', arg)
 })
+Vue.component('Scroller', Scroller)
+Vue.component('Loading', Loading)
 new Vue({
   router,
   store,
