@@ -3,7 +3,7 @@
       <Loading v-if="isLoading"></Loading>
       <!-- <Scroller v-else> -->
         <ul v-infinite-scroll="loadMore" infinite-scroll-distance="52" infinite-scroll-disabled="loading" infinite-scroll-immediate-check="false">
-            <li v-for="item in comingList" :key="item.filmId">
+            <li v-for="item in comingList" :key="item.filmId" @click="handleToDetail(item.filmId)">
                 <div class="pic_show"><img :src="item.poster" alt=""></div>
                 <div class="info_list">
                     <h2>{{item.name}} <span style="font-size: 9px;color: #fff;background-color: #d2d6dc;height: 14px;
@@ -77,6 +77,9 @@ export default {
         this.comingList = [...this.comingList, ...res.data.data.films]
         this.loading = false
       })
+    },
+    handleToDetail(filmId) {
+      this.$router.push(`/film/detail/c/${filmId}`)
     }
   }
 }

@@ -13,7 +13,7 @@
                   <div class="img"><img :src="item.img | setWH('128.180')"></div>
                   <div class="info">
                     <p><span>{{item.nm}}</span><span>{{item.sc}}</span></p>
-                    <p>{{item.movieAlias}}</p>
+                    <p>{{ item.enm }}</p>
                     <p>{{item.cat}}</p>
                     <p>{{item.pubDesc}}</p>
                   </div>
@@ -41,7 +41,7 @@ export default {
   },
   watch: {
     message(newVal) {
-      console.log(newVal, this.source)
+      // console.log(newVal, this.source)
       var cityId = this.$store.state.city.id
       // 调用方法
       this.cancelRequest()

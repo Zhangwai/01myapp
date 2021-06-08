@@ -19,6 +19,28 @@ export default {
       component: () => import(/* webpackChunkName: "yjgroup" */ '@/views/Film/search')
     },
     {
+      path: 'detail/n/:filmId',
+      name: 'yyDetail',
+      components: {
+        default: () => import('@/views/Film/nowplaying'),
+        detail: () => import(/* webpackChunkName: "yjgroup" */ '@/views/Film/detail')
+      },
+      props: {
+        detail: true
+      }
+    },
+    {
+      path: 'detail/c/:filmId',
+      name: 'yyDetail',
+      components: {
+        default: () => import('@/views/Film/comingsoon'),
+        detail: () => import(/* webpackChunkName: "yjgroup" */ '@/views/Film/detail')
+      },
+      props: {
+        detail: true
+      }
+    },
+    {
       path: '',
       redirect: '/film/nowplaying'
     }

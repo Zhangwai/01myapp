@@ -1,9 +1,9 @@
 <template>
-    <div class="film_body" ref="film_body" @click="handleToDetail">
+    <div class="film_body" ref="film_body">
       <Loading v-if="isLoading"></Loading>
       <!-- <Scroller v-else> -->
         <ul v-infinite-scroll="loadMore" infinite-scroll-distance="52" infinite-scroll-disabled="loading" infinite-scroll-immediate-check="false" >
-          <li v-for="item in filmList" :key="item.filmId">
+          <li v-for="item in filmList" :key="item.filmId" @click="handleToDetail(item.filmId)">
               <div class="pic_show" ><img :src="item.poster" alt=""></div>
               <div class="info_list">
                   <h2>{{item.name}} <span style="font-size: 9px;color: #fff;background-color: #d2d6dc;height: 14px;
@@ -63,8 +63,15 @@ export default {
     })
   },
   methods: {
-    handleToDetail() {
-      console.log('handleToDetail')
+    handleToDetail(filmId) {
+      // console.log(filmId)
+      // this.$router.push(`/film/detail/${filmId}`)
+      this.$router.push({
+        name: 'yyDetail',
+        params: {
+          filmId: filmId
+        }
+      })
     },
     loadMore() {
       console.log('到底了mmmmm')
