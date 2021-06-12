@@ -19,4 +19,5 @@ export default {
 </script>
 <style scoped>
   /* section{padding-bottom: 52px;} */
+  div{height: 100%;}
 </style>>

@@ -3,10 +3,10 @@
       <Loading v-if="isLoading"></Loading>
       <div ref="cinema_body" v-else style="height:100%">
         <ul>
-            <li v-for="item in cinemaList" :key="item.cinemaId">
+            <li v-for="item in cinemaList" :key="item.cinemaId" @click="look">
                 <div class="cinema_price">
                     <p>{{item.name}}</p>
-                    <p class="q"><span class="price">{{ item.lowPrice | Price }}</span> 元起</p>
+                    <p class="q"><span class="price">{{ item.lowPrice / 100 }}</span> 元起</p>
                 </div>
                 <div class="cinema_address">
                     <p>{{ item.address }}</p>
@@ -27,6 +27,7 @@
 import BScroll from 'better-scroll'
 export default {
   name: 'CinemaList',
+  props: ['changeQu'],
   data() {
     return {
       cinemaList: [],
@@ -34,10 +35,19 @@ export default {
       prevcityId: -1
     }
   },
+  methods: {
+    look() {
+      console.log(this.changeQu, this.changeQu.length, 'changeQu')
+    }
+  },
+  created() {
+    this.isLoading = false
+    this.cinemaList = this.changeQu
+  },
   activated() {
     var cityId = this.$store.state.city.id
-    if (this.prevCityId === cityId) { return }
     this.isLoading = true
+    if (this.prevCityId === cityId && this.changeQu.length === 0) { return }
     this.axios({
       url: `https://m.maizuo.com/gateway?cityId=${cityId}&ticketFlag=1&k=7743423`,
       headers: {
@@ -46,9 +56,10 @@ export default {
       }
     }).then(res => {
       const data = res.data.data
-      console.log(res.data.data)
+      // console.log(res.data.data.cinemas)
       if (data) {
         this.cinemaList = res.data.data.cinemas
+        this.$emit('childList', this.cinemaList)
         this.isLoading = false
         this.prevCityId = cityId
         this.$nextTick(() => {
@@ -58,11 +69,6 @@ export default {
         })
       }
     })
-  },
-  filters: {
-    Price(data) {
-      return data.toString().replace('00', '')
-    }
   }
 }
 </script>

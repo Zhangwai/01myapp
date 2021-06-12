@@ -10,7 +10,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Y颜电影'
+      default: 'YY电影'
     }
   }
 }

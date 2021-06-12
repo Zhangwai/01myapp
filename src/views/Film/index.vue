@@ -40,7 +40,7 @@ export default {
     }
   },
   mounted() {
-    this.$refs.main.style.height = document.documentElement.clientHeight + 'px'
+    // this.$refs.main.style.height = document.documentElement.clientHeight + 'px'
     var self = this
     setTimeout(() => {
       console.log('213', this.$store.state.city.id, window.localStorage.getItem('nowId'), this.$store.state.city.id === window.localStorage.getItem('nowId'))
