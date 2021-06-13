@@ -41,13 +41,16 @@ export default {
     }
   },
   created() {
-    this.isLoading = false
-    this.cinemaList = this.changeQu
+    if (this.changeQu.length !== 0) {
+      this.isLoading = false
+      this.cinemaList = this.changeQu
+    }
+    // console.log(this.cinemaList, this.changeQu)
   },
   activated() {
     var cityId = this.$store.state.city.id
-    this.isLoading = true
     if (this.prevCityId === cityId && this.changeQu.length === 0) { return }
+    this.isLoading = true
     this.axios({
       url: `https://m.maizuo.com/gateway?cityId=${cityId}&ticketFlag=1&k=7743423`,
       headers: {
@@ -59,6 +62,7 @@ export default {
       // console.log(res.data.data.cinemas)
       if (data) {
         this.cinemaList = res.data.data.cinemas
+        // console.log(this.cinemaList)
         this.$emit('childList', this.cinemaList)
         this.isLoading = false
         this.prevCityId = cityId

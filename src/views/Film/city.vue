@@ -2,7 +2,7 @@
   <div class="city_body"  ref="mychild">
     <Loading v-if="isLoading"></Loading>
     <div class="city_list" ref="city_list" v-else>
-      <!-- <Scroller ref="city"> -->
+      <Scroller ref="city">
         <div style="overflow:hidden">
           <div class="city_hot">
             <h2>热门城市</h2>
@@ -19,7 +19,7 @@
             </div>
           </div>
         </div>
-      <!-- </Scroller> -->
+      </Scroller>
     </div>
     <div class="city_index">
       <ul>
@@ -30,7 +30,7 @@
 </template>
 <script>
 import axios from 'axios'
-import BScroll from 'better-scroll'
+// import BScroll from 'better-scroll'
 export default {
   name: 'City',
   data() {
@@ -57,25 +57,27 @@ export default {
           'X-Host': 'mall.film-ticket.city.list'
         }
       }).then(res => {
-      //   console.log(res.data.data.cities)
+        console.log(res.data.data.cities)
         // [{index: 'A',list: [{},{}]}]
+        console.log('aaa', res.data.data.cities)
         this.isLoading = false
         var { cityList, hotList } = this.formatCityList(res.data.data.cities)
         this.cityList = cityList
         this.hotList = hotList
-        console.log(this.cityList, this.hotList)
+        // console.log(this.cityList, this.hotList)
         // 本地存储
         window.localStorage.setItem('cityList', JSON.stringify(cityList))
         window.localStorage.setItem('hotList', JSON.stringify(hotList))
-        this.$nextTick(() => {
-          this.scroll = new BScroll(this.$refs.city_list, {
-            click: true
-          })
-          this.scroll.on('touchEnd', pos => {
-            this.scroll.refresh()
-            console.log(1)
-          })
-        })
+        // this.$nextTick(() => {
+        //   console.log(this)
+        //   this.scroll = new BScroll(this.$refs.city_list, {
+        //     click: true
+        //   })
+        //   this.scroll.on('touchEnd', pos => {
+        //     this.scroll.refresh()
+        //     console.log(this)
+        //   })
+        // })
       })
     }
   },
@@ -109,13 +111,13 @@ export default {
     // 页面定位
     handleToIndex(index) {
       // console.log(this.$refs.city_sort.getElementsByTagName('h2'))
-      console.log('111', this.$refs.city_sort.parentNode.scrollTop)
+      // console.log('111', this.$refs.city_sort.parentNode.scrollTop)
       var h2 = this.$refs.city_sort.getElementsByTagName('h2')
-      console.log('222', h2[index].offsetTop)
-      this.ToScrollTop(h2[index].offsetTop)
-      // this.$refs.city.ToScrollTop(h2[index].offsetTop)
+      // console.log('222', h2[index].offsetTop)
+      // this.ToScrollTop(h2[index].offsetTop)
+      this.$refs.city.ToScrollTop(h2[index].offsetTop)
       // this.$refs.city_sort.parentNode.scrollTop = h2[index].offsetTop
-      console.log('333', this.$refs.city_sort.parentNode.scrollTop, h2[index].offsetTop)
+      // console.log('333', this.$refs.city_sort.parentNode.scrollTop, h2[index].offsetTop)
     },
     ToScrollTop(y) {
       this.scroll.scrollTo(0, -y)
