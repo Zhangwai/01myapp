@@ -4,6 +4,11 @@ module.exports = {
       ajax: {
         target: 'https://m.maoyan.com',
         ChangeOrigin: true
+      },
+      api: {
+        target: 'http://192.168.10.109:8080',
+        ChangeOrigin: true,
+        pathRewrite: { '^/api': '' }
       }
     }
   }

@@ -30,7 +30,7 @@ export default {
     },
 
     Login() {
-      console.log(this.username, this.password)
+      // console.log(this.username, this.password)
       if (this.username === '') {
         alert('用户名不能为空')
       } else if (this.password === '') {

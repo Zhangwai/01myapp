@@ -32,7 +32,30 @@ export default {
       this.$store.commit('showUser/changeShower')
     },
     Register() {
-
+      if (this.pwd !== this.pwdAgain) {
+        alert('两次输入的密码不一致')
+        this.pwd = ''
+        this.pwdAgain = ''
+      } else {
+        const params = new FormData()
+        console.log(this.username, this.pwd)
+        params.append('username', this.username)
+        params.append('password', this.pwd)
+        // console.log(params)
+        var url = '/api/user/registered'
+        this.axios({
+          method: 'post',
+          url: url,
+          data: params
+        }).then(res => {
+          if (res.data.code === 10000) {
+            this.$store.commit('showUser/changeShower')
+            alert('注册成功')
+          } else {
+            alert('注册失败')
+          }
+        })
+      }
     }
   }
 
